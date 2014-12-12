@@ -1,0 +1,897 @@
+Int MA3=2
+Int MA2=0
+Int ADEN=1
+// MA3=2 : ma3
+
+IF(ADEN==0) {
+曲名{"リネージュ１－The Man of Honor - 戦争勝利"}
+} ELSE {
+曲名{"リネージュ１－The Man of Honor - アデン"}
+}
+作者{"Copyright 1998-2003 NCsoft Corporation. Licenced to NC Japan K.K. All Rights Reserved. Arrenged by ななみ"}
+コメント{"http://www.lineageonline.jp/"}
+
+Include (unison.h);
+
+Tempo=120
+TimeBase      = 96     // 四分音符分解能
+拍子 4,4
+IF(MA2==1 || MA3==1) {
+	Expression.Frequency(48);
+	Modulation.Frequency(45);
+} ELSE {
+	Expression.Frequency(48);
+	Modulation.Frequency(45);
+}
+
+REV(127)
+
+Function OctaveUnison2(Str s) {
+	IF(MA2==1 || MA3==1) {
+		Key=12;  s; Key=0;
+	} ELSE {
+		OctaveUnison(s);
+	}
+}
+Function Dy(D,value) {
+	Int Base = 127 - (D % 128)
+	Int Dynamic = D / 128
+	Int V
+	Int V2
+
+	V = value - Base
+	V = 127 - V
+	V = V * 10 * Dynamic
+	V = V / 1000
+	V = 127 - V
+	IF(V<0) {
+		V=0
+	}
+	IF(V>127) {
+		V=127
+	}
+	Result = V
+}
+
+Function Exp(value) {
+	Int	D=110*128+115
+	EP(Dy(D,value));
+}
+
+Function Exp2(value) {
+	Int	D=110*128+115
+	IF(MA3==2 || (MA2==0 && MA3==0)) {
+		EP(Dy(D,value));
+	}
+}
+
+Function Exp_T(value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12) {
+	Int	NowTime;
+	Int	D=110*128+115
+
+	IF(MA2==0) {
+		NowTime = Time;
+	
+		EP.T(Dy(D,value1), Dy(D,value2), value3);
+		IF(value6<>0) {
+			Time=NowTime+value3
+			EP.T(Dy(D,value4), Dy(D,value5), value6)
+		}
+		IF(value9<>0) {
+			Time=NowTime+value3+value6
+			EP.T(Dy(D,value7), Dy(D,value8), value9)
+		}
+		IF(value12<>0) {
+			Time=NowTime+value3+value6+value9
+			EP.T(Dy(D,value10), Dy(D,value11), value12)
+		}
+		Time = NowTime;
+	}
+}
+
+Function Exp_T2(value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12) {
+	Int	NowTime;
+	Int	D=110*128+115
+
+	IF(MA3==2 || (MA2==0 && MA3==0)) {
+		NowTime = Time;
+	
+		EP.T(Dy(D,value1), Dy(D,value2), value3);
+		IF(value6<>0) {
+			Time=NowTime+value3;
+			EP.T(Dy(D,value4), Dy(D,value5), value6)
+		}
+		IF(value9<>0) {
+			Time=NowTime+value3+value6;
+			EP.T(Dy(D,value7), Dy(D,value8), value9)
+		}
+		IF(value12<>0) {
+			Time=NowTime+value3+value6+value9;
+			EP.T(Dy(D,value10), Dy(D,value11), value12)
+		}
+		Time = NowTime;
+	}
+}
+
+Function SelVoice(midi,ma3big,ma3small,ma2) {
+  IF(MA2==0 && MA3==0) {
+    音色(midi)
+  }
+  IF(MA3==2) {
+    音色(ma3big,124,1)
+  }
+  IF(MA3==1) {
+    音色(ma3small,124,1)
+  }
+  IF(MA2==1) {
+    IF(ma2>128) {
+      音色(ma2-128,122,2)
+    } ELSE {
+      音色(ma2,122,0)
+    }
+  }
+}
+
+#TRUMPET1_1={
+	l8Exp(127)q100
+	r4cf>c2<
+	r4dgb2
+	r4fb->d2
+	d-2Exp_T(127,100,!2)e-2
+	Exp_T(127,100,!8,100,127,!1^!2.)f1^1<<
+}
+#TRUMPET1_3={
+	Exp(127)q40l8
+	'a->ce-<' r q100Exp_T(127,110,!8,110,127,!4.)'f2b-2>d2<' Exp(127)'fb->d<'r
+	q40'f>cf<'r 'f>cf<'r16'f16>c16f16<' 'f>cf<''f>cf<''f>cf<''f>cf<'
+	q40
+	'fg+>c+<'r 	q100Exp_T(127,110,!8,110,127,!4.)'g2b-2>e-2<' q40'fg+>c+<''gb->e-<'
+	'f>cf<'r8
+}
+
+#STRING1_4={
+	l8q20
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+	OctaveUnison({
+		  ff fff12f12f12
+		fr r2.
+	})
+} ELSE {
+	rr rr r12r12r12
+	rr r2.
+}
+}
+
+#TRUMPET1_2={
+	l8Exp(100)q60
+	r4'cf'r q80r4[3 'c12f12']q60
+	Exp(120)
+	r4'dg'r r4q50'd4g4'q60
+	r4'df'r r4q50'd4f4'q80
+	'f8d-8'r8 [3 'f12d-12' ] q100Exp_T(120,90,!2)'<b-2>e-2'
+	Exp(120,100,!8,100,120,!8^2.^1)'c1^1f1^1'
+	l12q90Exp(127)
+	'a->ce-<'r12'a->ce-<' q95Exp_T(127,90,!8)'f2b-2>d2<'  q60Exp(127)[3 'fb->d<']
+	q90'fa>c<'r6 r2.
+	'fg+>c+<'r12 'fg+>c+<' q95Exp_T(127,90,!8)'g2b-2>e-2<' q40l8 Exp(127)'fg+>c+<''gb->e-<'
+	q90'a>cf<'r8r2.r1
+}
+#TRUMPET2_1={
+	[6 r1]
+	q50l12
+
+	Sub{
+		frrfff frfrfr
+		erreee eeeeee
+	}
+		Exp(100)
+		crrccc crcrcr
+		crrccc Exp_T(100,127,!4.)cccccc
+
+}
+#TRUMPET2_2={
+	q100l4Exp(127)
+	f2a>c <b2>d2
+	f2ec c12d12e12 Exp_T(127,127,!2,127,70,!4)d2.
+	Exp_T(100,127,!2)c2<g>c d2fd
+	l12
+}
+#TRUMPET2_2_2={
+	Exp(120)
+	l4q35
+	[2 
+		'<fa>c' r4 '<fa>c'r4
+		'<gb>d' '<gb>d' r2
+	]
+	'<g>ce' r4 '<g>ce' r4
+	'<a>df' '<a>df' r2
+}
+
+#TRUMPET2_3={
+	l12Exp(127)
+	Sub{
+		q50e-re-q100Exp_T(127,90,!4.)d2 Exp(127)q50ddd
+		f8r8<Exp(90)q50f12r12f12 q20f8f8f8f8>Exp(127)
+		q50d-rd-q100Exp_T(127,90,!4.)e-2 Exp(127)q30 d-8e-8
+	}
+	Sub{
+		q50crc<q100b-2 q50b-b-b- >
+		c8r8<q50c12r12c12 q20c8c8c8c8>
+		q50<a-ra-q100b-2 q30a-8b-8
+	}
+		q50a-ra-q100f2 q50fff
+		f8r8<q50f12r12f12 q20f8f8f8f8>
+		q50frfq100g2q30f8g8
+}
+#TRUMPET2_4={
+	'f8>c8f8<' r-8
+}
+
+#TRUMPET3_1={
+	l8q60
+	Sub{
+		o6fr4.<e-r4.
+		b-r4. >d-r4.<
+		br4.q40b6b6b6q60
+		b-r4. b-rb-r
+	}
+	Sub{
+		o6cr4.<cr4.
+		g-r4. b-r4.
+		g+r4.q40g+6a+6g+6q60
+		fr4. frfr
+	}
+		o5fr4.<gr4.>
+		e-r4. fr4.
+		'<b>d+'r4.q40'<b6>d+6'd+6'<b6>d+6'q60
+		'<b->e-'r4. drdr
+}
+#TRUMPET4_1={
+	l12q60Exp(127)
+	Sub{
+		o6
+		e-rr e-e-e- d-rr d-d-d-<
+		f+rr f+f+f+ g+rr g+g+g+
+	}
+	Sub{
+		o5
+		b-rr b-b-b- a-rr a-a-a-
+		c+rr c+c+c+ e-rr e-e-e-
+	}
+		o5
+		g-rr g-g-g- frr fff
+		r2 crr ccc
+}
+
+#TRUMPET4_2={
+	l12q60Exp(127)
+	Sub{
+		o6
+		e-rr e-e-e- d-rr rrr<
+		f+rr f+g+a+ g+rr g+g+g+
+	}
+	Sub{
+		o5
+		b-rr b-b-b- a-rr rrr
+		c+rr c+c+c+ e-rr rrr
+	}
+		o5
+		g-rr g-g-g- frr rrr
+		r2 crr rrr
+}
+#TRUMPET5_1={
+	o5l12
+	b-rr r4 brb-rbr
+	b-rr r4 brb-r>c+r<
+	b-rr r2.
+	r1
+	r1
+	e-rr r4 f+re-rg+r
+	e-rr <e-e-e- e-
+}
+
+#TRUMPET5_2={
+	o4l12
+	OctaveUnison({
+		b-rr b-b-b- brb-rbr
+		b-rr b-b-b- brb-r>c+r<
+	})
+	b-rr b-b-b- b-rb-rb-r
+	a-rr a-a-a- f+rf+rf+r
+	err eee erf+rer
+	e-rr e-e-e- f+re-rg+r
+	e-rr <e-e-e- e-
+}
+
+トラック 1;
+	SelVoice(Trumpet,38,38,Trumpet);
+	v127
+IF(ADEN==0) {
+	#TRUMPET1_1;
+	#TRUMPET1_3;
+	r2.r1
+}
+	o5
+	#TRUMPET2_1
+	#TRUMPET2_2
+IF(MA3==2 || (MA2==0 && MA3==0)) {
+	o6#TRUMPET2_3
+} ELSE｛
+	[3 r1]
+}
+	[8 r1]
+	#TRUMPET4_1
+	#TRUMPET5_2
+
+トラック 2;
+	SelVoice(BrassSection,39,39,BrassSection)
+	v127
+IF(ADEN==0) {
+	#TRUMPET1_2;
+}
+	SelVoice(FrenchHorn,20,20,FrenchHorn)
+	v120
+	#TRUMPET2_1
+	SelVoice(BrassSection,39,39,BrassSection)
+	v127
+IF(MA2<>0) {
+	[6 r1]
+} ELSE {
+	#TRUMPET2_2_2
+}
+	v127
+	o6#TRUMPET2_3
+	#TRUMPET3_1
+	[4 r1]
+	o5#TRUMPET4_2
+	#TRUMPET5_1
+
+#ORCHHIT1_1={
+	l8q80
+	Exp(70)OctaveUnison2('cf')r8r2.
+	Exp(100)OctaveUnison2('dg')r8r2.
+	OctaveUnison2('fb-')r8r2.
+	OctaveUnison2('a-2>d-2<' 'b-2>e-2<')
+	OctaveUnison2('f1>f1<'r1)
+}
+#ORCHHIT1_2={
+	Exp(60)'a->ce-<'r4.r2
+}
+
+#STRING1_1={
+	l1q100
+	Exp_T(70,110,!2.)
+	OctaveUnison2('cf')
+	OctaveUnison2('dg')
+	OctaveUnison2('db-')
+}
+#STRING1_2={
+	Exp(120)
+	OctaveUnison2('f2>d-2<')
+	OctaveUnison2('g2>e-2<')
+	Exp_T(120,120,!1,120,80,!1)OctaveUnison2('a1^1>f1^1<')
+}
+
+#VIOLIN2_1={
+	q100l4
+	Exp_T(100,127,!2)Sub{<b-2.r4>}Sub{r2d2}r2.f4
+	'c2e2''e2g2'
+	Sub{d1}b-2a4f4
+	'd12f12''e12g12''f12a12'Exp_T(127,127,!2,127,90,!4)'e2.g2.'
+	Exp(127)'c2f2''<a4>c4''c4f4'
+	'd2g2''g2>d2<'
+	Exp_T(127,127,!1,127,70,!1)Sub{'g1^1>c1^1<'}f1e1
+	
+}
+
+#VIOLIN2_2={
+	q100l4
+	Exp_T(100,127,!2)<b-2>df
+	e2g2
+	b-2a4f4
+	f12g12a12Exp_T(127,127,!2,127,100,!4)g2.
+	Exp(127)f2c4f4
+	g2>d2
+	Exp_T(127,120,!1,120,70,!1)c1^1
+}
+
+#STRINGS3_1={
+	l12Exp(127)q50
+	Sub{
+		o5r1r1
+		brr bbb br>c+r<br
+		b-rr b-b-b- b-rr b-rr
+	}
+	Sub{
+		o5r1r1
+		g+rr g+g+g+ g+rg+rg+r
+		frr fff frrfrr
+	}
+		o5r1r1
+		d+rr d+d+d+ d+rd+rd+r
+		d+rr d+d+d+ drrdrr
+}
+#VIOLIN3_2={
+	l12q110
+	o5
+	Exp(127)e-fg- Exp_T(127,90,!4)g-fe-	Exp(127)f+g+a+ Exp_T(127,90,!4)a+g+f+
+	Exp(127)g+a+b Exp_T(127,90,!4)ba+g+	Exp(127)b>c+<b b>c+<b
+	q100
+	b-rrq50[9 b-]
+	'b->b-<' rr q50 Exp_T(90,127,!4.)[9 'b->b-<']
+}
+#VIOLINE5_1={
+	l12q65
+	Sub{
+		r1
+		o6
+		r4 c+c+c+ e-re-re-r
+
+		[3 frr fff frfrfr]
+	}
+		o5
+		b-rr b-b-b- brb-rbr
+		b-rr b-b-b- brb-r>c+r<
+
+		b-rr b-b-b- b-rb-rb-r
+		b-rr b-b-b- >q90crcrcr<
+		brr bbb br>c+r<br
+}
+
+#VIOLINE5_2={
+	l12q65
+	Sub{
+		o6
+		q70e-rr e-e-e- f+re-rg+r
+		e-
+	}
+		o5
+		q80e-rr e-e-e- f+re-rg+r
+		e-rr <e-e-e- e-rr
+}
+
+#VIOLINE5_3={
+	l12q80
+		o6
+		q70e-rr e-e-e- f+re-rg+r
+		e-rr <<e-e-e- e-rr r4 r1 v1 EP(1) e-1^1
+}
+
+トラック 4;
+	SelVoice(TremoloStrings,18,18,TremoloStrings)
+	v127q100o5
+IF(ADEN==0) {
+	#STRING1_1
+	#STRING1_2
+	[5 r1]
+}
+	SelVoice(Strings1,18,18,Strings1)
+IF(MA2<>0) {
+	[8 r1]
+} ELSE {
+	#VIOLIN2_1
+}
+	[9 r1]
+	#STRINGS3_1
+IF(MA2<>0) {
+	[6 r1]
+} ELSE {
+	#VIOLIN3_2
+}
+	o5#TRUMPET4_2
+	v127
+	#VIOLINE5_1
+	#VIOLINE5_2
+
+トラック 5;
+	SelVoice(Violin,19,19,Violin)
+	v127q100o5
+IF(ADEN==0) {
+	[3 r1]
+	#STRING1_2
+	[5 r1]
+}
+IF(MA3==2) {
+	M.W(0,100,!4)
+}
+	#VIOLIN2_1
+	[9 r1]
+	[4 r1]
+	#VIOLIN3_2
+	r1r1
+	v127
+	#VIOLINE5_1
+	#VIOLINE5_2
+
+#HORN1={
+	q100Exp(110)
+	'c1f1''d1g1''d1f1' 'd-2f2''<b-2>e-2' 'f1^1c1^1'
+}
+#HORN2_1={
+	q100Exp(110)
+	Sub{f2.r4}Sub{r2b-2}r2.>d4
+	'<g2>c2''c2e2'
+	'<b-1>d1'
+	Exp_T(110,110,!2.,110,60,!4)'c1e1'
+	Exp(110)
+	'<f1>c1'
+	Sub{'<g1>d1'}r2g2
+	EP.T(127,127,!1,127,80,!2.)Sub{'<g1^1>c1^1'}f1e1
+}
+#HORN2_2={
+	q100
+	Exp(127) '<a1>c1' Exp_T(127,100,!1) '<b1>d1<'
+	Exp(127) 'a1>c1f1' Exp_T(127,100,!1) '<g1b1>f1<'
+	Exp(127) 'g1>c1e1' Exp_T(127,127,!2,127,100,!2) '<a1>d1f1'
+}
+
+#STRING5_3={
+	b-rrb-b-b- b-rb-rb-r
+	a-rra-a-a- g-rg-rg-r
+	erreee erf+rer
+}
+
+トラック 6;
+	SelVoice(Strings1,18,18,Strings1)
+	v127q100o4
+IF(ADEN==0) {
+	[6 r1]
+	#TRUMPET1_3;
+	<
+	#STRING1_4;
+}
+	[8 r1]
+	v127o5
+	#TRUMPET2_2_2
+
+IF(MA3==2 || (MA2==0 && MA3==0)) {
+	o6v127
+	#TRUMPET2_3
+	#TRUMPET2_4
+} ELSE {
+	[3 r1]
+}
+//	[12 r1]
+//	o3
+//	#STRING5_3
+//	#VIOLINE5_3
+
+トラック 3;
+	SelVoice(OrchestraHit,34,34,OrchestraHit)
+	v127q80o5
+IF(ADEN==0) {
+IF(MA2<>0) {
+	[11 r1]
+} ELSE {
+	#ORCHHIT1_1;
+	#ORCHHIT1_2;
+	[4 r1]
+}
+}	
+IF(MA3==2) {
+	SelVoice(Violin,35,35,Violin)
+	M.W(0,100,!4)
+	#VIOLIN2_2;
+} ELSE {
+	[8 r1]
+}
+	SelVoice(Violin,19,19,Violin)
+	o5v100
+IF(MA2<>0) {
+	[6 r1]
+} ELSE {
+	#HORN2_2
+}
+	v127o5
+	#TRUMPET2_3
+	#TRUMPET2_4
+	[4 r1]
+IF(MA3==2) {
+	SelVoice(Violin,35,35,Violin)
+	#VIOLIN3_2
+	r1r1
+	v127
+	#VIOLINE5_1
+} ELSE {
+	[4 r1]
+}
+
+#HORN2_3={
+	l12Exp(127)
+	Sub{
+		q50e-re-Exp_T(127,100,!4)d2 Exp(127)q50ddd
+		Exp_T(127,100,!4)f4 q50f12r12f12 q20f8f8f8f8 Exp(127)
+		q50d-rd-Exp_T(127,100,!4)e-2 Exp(127)q30 d-8e-8
+	}
+	Sub{
+		q50crc<q100b-2 q50b-b-b- >
+		c4 q50c12r12c12 q20c8c8c8c8
+		q50<a-ra-q100b-2 q30a-8b-8
+	}
+		q50a-ra-q100f2 q50fff
+		f4 q50f12r12f12 q20f8f8f8f8
+		q50frfq100g2q30f8g8
+}
+
+#HORN3_1={
+	l12Exp(127)q50
+	Sub{
+		o5frr fff e-rr e-rr
+		e-rr e-e-e- d-rr d-rr
+		<brr bbb br>c+r<br
+		b-rr >e-e-e- drr drr
+	}
+	Sub{
+		o5crr ccc crr crr<
+		b-rr b-b-b- b-rr b-rr
+		g+rr g+g+g+ g+rg+rg+r
+		frr b-b-b- b-rr b-rr
+	}
+		o4frr fff grr grr
+		g-rr g-g-g- frr frr
+		d+rr d+d+d+ d+rd+rd+r
+		d+rr fff frr frr
+}
+
+#HORN3_2={
+	l12q50
+	Sub{
+		o5
+		b-b-b-4r b-b-b-4r
+		bbb4r bbb4r
+		b-6r [9 b-]
+		b-6r [9 b-]
+	}
+	Sub{
+		o5
+		g-g-g-4r g-g-g-4r
+		g+g+g+4r f+f+f+4r
+		f6r [9 f]
+		f6r [9 f]
+	}
+		o5
+		e-e-e-4r d-d-d-4r
+		d+d+d+4r d+d+d+4r
+		e-6r [9 e-]
+		d6r [9 d]
+}
+
+#HORN4_2={
+	l12q60Exp(127)
+	Sub{
+		o5
+		e-rr e-e-e- d-rr rrr<
+		a+rr a+a+a+ g+rr g+g+g+
+	}
+	Sub{
+		b-rr b-b-b- a-rr rrr
+		f+rr f+f+f+ e-rr rrr
+	}
+		g-rr g-g-g- frr rrr
+		r1
+}
+
+#HORN5_1={
+	o5q100
+	Exp(90)f1
+	Exp(127)Sub{f1}r2a-2
+	e-1f1^1
+}
+#HORN6_1={
+	o4l12q50
+	OctaveUnison2("e-rr e-e-e- f+re-rg+r e-rr < e-e-e- e-")
+}
+トラック 7;
+	SelVoice(FrenchHorn,20,20,FrenchHorn)
+	v127q100o5
+IF(ADEN==0) {
+	#HORN1;
+	<
+	#TRUMPET1_3;
+	r2.r1
+	>
+}
+	<
+	#HORN2_1
+	#HORN2_2
+	#HORN2_3
+	#HORN3_1
+	#HORN3_2
+	#HORN4_2
+	#HORN5_1
+	#HORN6_1
+
+#TIMPANI1={
+	Exp(60)
+	[5 Sub{[32 f32]} r1 ]
+	Exp_T(60,40,!1) Sub{[32 f32]} r1
+}
+
+#TIMPANI2={
+	Exp(127+15)
+	o3
+	[4 r4b-4]
+	r1r1r1
+	e-1 r4 e-12e-12e-12 e-4
+}
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+トラック 14;
+	SelVoice(Timpani,24,24,Timpani)
+	v127q100o3
+IF(ADEN==0){
+	#TIMPANI1
+	[6 r1]
+}
+	[26 r1]
+	#TIMPANI2
+}
+
+#CONTRABASS1={
+	q100
+	<Exp_T(90,110,!1)f1^1^1^1^1^1>
+	q50l8
+	Exp(127)
+	a-rb-r r4 b-12b-12b-12
+	frfr16f16 ffff
+	d-.d-16e- r r4 d-e-
+	frfffff12f12f12
+	frfe-de-cd
+}
+
+#CONTRABASS2_1={
+	q25l4Exp(127+15)<
+	b-r2.
+	b-r>b-r<
+	b-r2.
+	b-r2>b-
+	arfr
+	grdr
+	q100Exp_T(127+15,70,!8,70,70,!1^4.,70,20,!2)c1^1
+}
+#CONTRABASS2_2={
+	q100Exp(127+15)
+	Exp_T(127+15,127+15,!1^1^1,127+15,50,!1)f1^1^1^1
+	Exp(127+15)e1d1
+	q60l12<
+	a-ra-Exp_T(127+15,80,!8)b-2Exp(127+15)b-b-b-
+	>f8r8f6f f8f8f8f8
+	d-rd-Exp_T(127+15,100,!8)e-2Exp(127+15)d-8e-8
+	l4q50
+	frcr
+	e-r<b-r
+	g+rg+r
+	b-b-b-b-
+	e-rf+r
+	g+rbr
+	b-b-b-b-
+	b-b-l12q70b-b-b-b-b-b-
+	l4q50
+	>e-rd-r
+	f+rg+r
+	<b-b-b-b-
+	b-b-b-b-
+	>l12q80
+	b-rrb-b-b- b-rb-rb-r
+	a-rra-a-a- g-rg-rg-r
+	erreee erf+rer
+	e-rre-e-e- f+re-rg+r
+	e-rre-e-e- e-
+}
+
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+トラック 13;
+	v110o3
+	SelVoice(PizzicatoStrings,40,40,PizzicatoStrings)
+IF(ADEN==0) {
+	[11 r1]
+}
+	OctaveUnison(#CONTRABASS2_1);
+}
+
+トラック 15;
+	v127
+	SelVoice(Contrabass,25,25,Contrabass)
+	o3
+IF(ADEN==0) {
+	OctaveUnison(#CONTRABASS1);
+}	
+	OctaveUnison(#CONTRABASS2_1);
+	OctaveUnison(#CONTRABASS2_2);
+
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+トラック 16;
+	v127
+	SelVoice(Strings1,42,25,Strings1)
+	o3
+IF(ADEN==0) {
+	#CONTRABASS1;
+}
+	#CONTRABASS2_1;
+	#CONTRABASS2_2;
+}
+
+// track 10 pcm 3
+トラック 10;
+	IF (MA3==0) { 音色(StandardSet) } ELSE { 音色(3,125,0) }
+	$b{n36,}//bass drum
+	$s{n38,}//snare
+IF(MA3==2) {
+	$c{n50,}//Cymbal
+}ELSE{
+	$c{n49,}//Cymbal
+}
+//	$c{n55,}//splash
+	//$v{EP(?)}
+	System.vAdd=1
+	Exp(127)
+IF(ADEN==0) {
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+	[3 Sub{Rythm{'v127b1c1'}} Sub{ [28 Rythm{v40s27} ] } r1]
+	[2 Sub{Rythm{'v127b1c1'}} Sub{ [13 Rythm{v40s27} ] } r2]
+	Sub{Rythm{'v127b1c1'}} Sub{ [28 Rythm{v40s27}] } r1
+	Sub{[14 v++ Rythm{s27s27} ] } r1
+} ELSE {
+	[3 Sub{Rythm{'v127b1c1'}} r1]
+	[2 Sub{Rythm{'v127b1c1'}} r2]
+	Sub{Rythm{'v127b1c1'}} r1
+	r1
+}
+	Rythm{
+		v127 'b6s6c6' v70s12 v80s2 v70s12s12s12
+		v80s4s6s12 v70s8s8s8s8
+		v80s6v50s12s2 v70s8s8
+		v80s4s8s8 s8s8v60s12s12s12
+		v80s4v75s8s8 v60s8s8s8s8
+	}
+}
+	Rythm {
+		v50s4 v60s12s12s12 v50s4s4
+		v50s4 s12s12s12 v60s12v50s12s12s12s12s12
+		v50s4 v60s12s12v50s12 s4v40s12s12s12
+		v45s4 s12s12s12 s12s12s12v60s12v45s12v50s12
+		s4s12s12s12 v60s4v50s12s12v55s12
+		v60s4v50s4v60s12v50s12v53s12v56s12v53s12s12
+		v60s4v50s12s12s12 s6s6s6
+		s4s12s12s12 v45s12v50s12v47s12s12v45s12s12
+
+		v60'b4c4s4'v50s12s12s12 v70s4 v50s12s12s12
+		v70'b4s4' 'b4s4' v50s12s12s12 v53s12v56s12v59s12
+		v60'b4c4s4's12s12s12 v70s4 v50s12s12s12
+		v70'b4s4' 'b4s4' v50s12s12s12 s12s12s12
+		v60'b4c4s4's12s12s12 v70s4 v50s12s12s12
+		v70'b4s4' 'b4s4' v50s12s12s12 s12s12s12
+
+		v60'b6s6c6'v50s12 s2 s12s12s12
+		s4s6s12 s8s8s8s8
+		s6s12 s2 s8s8
+
+		v50'b4s4' s12s12s12 s4v40s4
+		v50'b4s4' s12s12s12 s4v40s4
+		v50'b4s4' s12s12s12 s6v60s6s6v50
+		v50'b4s4' s12s12s12 s4 s12v55s12v50s12
+		v50s12v47s12v45s12 r4 v50s12v47s12v45s12 r4
+		v50s12v47s12v45s12 r4 v50s12v47s12v45s12 r4
+		v60'b4s4' v55'b12s12'v50s12s12 v55'b12s12'v50s12s12 v55'b12s12'v50s12s12
+		v60'b4s4' v55'b12s12'v50s12s12 v55'b12s12'v55s12s12 v60'b12s12's12s12
+		v70'b4s4c4'v50s12s12s12 v60s4 r4
+		v70'b4s4c4'v50s12s12s12 v60s4 r4
+		v60s4v50'b12s12c12's12s12 v60s6v50s6s6 r-2 r4v50'b4c4'
+		v60s4v50'b12s12c12's12s12 v60s6v50s6s6 r-2 r4v50'b4c4'
+		s1
+	}
+IF(MA3==2 || (MA3==0 && MA2==0)) {
+	Rythm{
+		v10[16 v++ s32s32]
+		v36[16 v-- s32s32]
+	}
+} ELSE {
+	r1r1
+}
+	Rythm{
+		v80'b4s4c4'v50s12s12s12 s6s6s6
+		s4 'b12s12' 'v55b12s12' 'v60b12s12' v70'b1s1c1'
+	}
+	EP(1)
+	Rythm{
+		r2 v1b1
+	}

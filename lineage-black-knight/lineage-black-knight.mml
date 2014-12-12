@@ -1,0 +1,193 @@
+Int MA3=1
+// MA3=0 : MIDI?
+// MA3=1 : small size
+// MA3=2 : big size
+
+曲名{"リネージュ１－Absolute Force - ブラックナイト＆ガードのテーマ"}
+作者{"Copyright 1998-2003 NCsoft Corporation. Licenced to NC Japan K.K. All Rights Reserved. Arrenged by ななみ"}
+コメント{"http://www.lineageonline.jp/"}
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+//　Ver 1.0 : 2003/08/28 とりあえずできる
+//  Ver 1.1 : 2003/09/14 バグ修正、太鼓＆シンバル置き換え、コンパクト版作成
+//
+////////////////////////////////////////////////////////////////////////////////////
+ 
+Tempo=100
+TimeBase      = 96     // 四分音符分解能
+Expression.Frequency(4);
+
+REV(127)
+
+Include (unison.h);
+
+// track 1 voice pcm 2
+トラック 1;
+IF (MA3==0) { 音色(Strings1) } ELSE { 音色(1,124,1) }
+v127o4EP(127)
+r1
+q30
+OctaveUnison("a4r2. a4r2 g4 a4r2.g4r4e-4")
+q100
+o5r8e8
+a4.g+16a16 b4.a16b16 q30>c8<'ce'8q100EP(127,70,!2)'ce'2 EP(127)b4>
+c4.<b16>c16d4.c16d16EP(127,70,!2.)'ce'2. EP(127)c4
+'fa'4.'eg'16'df'16'eg'4'c<g>'4
+'df'4.'ce'17'<b>d'16'ce'4<'ca'4>
+c4.<b16a16 a4.g+16a16 q30b8e8q100EP.T(127,70,!2)e2r4
+r1r2.b4>
+c2'd<g>'2 EP.T(127,70,!2)'c<e>'1<
+r1r1r1
+EP.T(80,127,!2.)'e<g+'1
+v1g+1
+
+// track 2 voice fm 2
+トラック 2;
+IF (MA3==0) { 音色(Violin) } ELSE { 音色(2,124,1) }
+v127o4EP(127)
+r1
+q30
+OctaveUnison("a4r2. a4r2 g4 a4r2.g4r4e-4")
+q100
+o5r8e8
+a4.g+16a16 b4.a16b16 q30>c8<'ce'8q100EP.T(127,70,!2)'ce'2 EP(127)b4>
+c4.<b16>c16d4.c16d16EP.T(127,70,!2.)'ce'2. EP(127)c4
+'fa'4.'eg'16'df'16'eg'4'c<g>'4
+'df'4.'ce'17'<b>d'16'ce'4<'ca'4>
+c4.<b16a16 a4.g+16a16 q30b8e8q100EP.T(127,70,!2)e2r4
+v1e1
+
+// track 3 voice fm 2
+トラック 3;
+IF (MA3==0) { 音色(Trumpet) } ELSE { 音色(3,124,1) }
+v127o5EP(127)q100
+r1
+r1r1r1r1
+r1r1r1r1
+r1r1r1r2.r8 e8
+a4.g+16a16 b4.a16b16 >q100c8<q50'ce'8q100EP.T(127,70,!2)'ce'2 EP(127)b4>
+c4.<b16>c16d4.c16d16EP.T(127,100,!2.)e2.EP(127)c4
+a4.g16f16g4c4
+f4.e16d16e4<a4>
+c4.<b16a16a4.g+16a16 b8q50e8q100e2.
+v1e1
+
+// track 5 voice fm 2
+トラック 5;
+IF (MA3==0) { 音色(FrenchHorn) } ELSE {音色(5,124,1) }
+v127o5EP(127)q100
+r1r1r1r1r1
+r1r2.r8d8e2g2>c1<
+'fa'2 'eg'2 'df'2 'ce'2
+'cf'1 '<b>e'1
+r1r2.r8d8e2g2>c1<
+f4a8b8>c4<e4 f2 e2
+v1e1
+
+// track 6 voice fm 3
+トラック 6;
+IF (MA3==0) { 音色(Strings1) } ELSE { 音色(6,124,1) }
+v127o3EP(127)
+r1q30
+OctaveUnison{ a8a16a16 a8a8 a16a16a8 a8a16a16}
+OctaveUnison{ b-16b-16b-8 b-8b-8 b-8b-16b-16 g8g8}
+OctaveUnison{ a16a16a8 a8a16a16 a16a16a8 a8a8 }
+OctaveUnison{ g8g16g16 g8g8 e-16e-16e-8 e-8e-16e-16 }
+
+q100o4a2g+2a2.r4
+>c2<g2>c2.r4
+'f<a>'2 'e<g>'2 'd<f>'2 'c<e>'4'ce'4
+'fa'1'eg+'1
+q100o4a2b2a2.r4
+>c2<g2>c2.r4
+'f<a>'2 'e<g>'2 'd<f>'2 'c<e>'4'ce'4
+'f<a>'2 c8f8c4 '<g+>be'1
+v1e1
+
+// track 7 voice pcm 1
+トラック 7;
+IF (MA3==0) { 音色(Timpani) } ELSE { 音色(7,124,1) }
+v127o3l32
+EP.T(40,127,!2.)
+r4eeeeeeeeeeeeeeeeeeeeeeee
+EP(127)
+a1r1r1r1
+a1r1>c2<g2>c1<
+f1>d1<f1e1
+a1r1>c1c1<
+f1>d1<f1r1
+
+// track 8 voice fm 2
+トラック 8;
+IF (MA3==0) { 音色(Contrabass) } ELSE { 音色(8,124,1) }
+v127o2l4q80EP(127)
+r1
+OctaveUnison("a1b-2.g4 a1g2e-2")
+OctaveUnison("a2e2a1 c2g2c1")
+OctaveUnison("f2c2d2c2 f1e1")
+OctaveUnison("a2e2a1 c2g2c1")
+OctaveUnison("f2c2d2c2 f1e1")
+
+// track 9 voice pcm 2
+IF (MA3<>1) {
+トラック 9;
+IF (MA3==0) { 音色(Strings1) } ELSE { 音色(1,124,1) }
+v127o2l4q80EP(127)
+r1
+OctaveUnison("a1b-2.g4 a1g2e-2")
+OctaveUnison("a2e2a1 c2g2c1")
+OctaveUnison("f2c2d2c2 f1e1")
+OctaveUnison("a2e2a1 c2g2c1")
+OctaveUnison("f2c2d2c2 f1e1")
+}
+
+// track 10 voice pcm 3
+トラック 10
+IF (MA3<>0) { 音色(3,125,0) }
+
+IF(MA3<>1) {
+$b{n36,}//bass drum
+$s{n38,}//snare
+$h{n42,}//hi-hat
+$m{n46,}//hi-hat open
+$c{n49,}//Cymbal
+} ELSE {
+$b{n35,}//bass drum
+$s{n38,}//snare
+$h{n42,}//hi-hat
+$m{n46,}//hi-hat open
+$c{n50,}//Cymbal
+}
+
+$v{EP(?)}
+
+v127EP.T(50,127,!2.)
+r4
+Rythm{ s32s32s32s32s32s32s32s32 s32s32s32s32s32s32s32s32 s32s32s32s32s32s32s32s32 }
+EP(127)
+Rythm{ 'bs'8v100s16s16 v110s8v100s8 v110s16s16s8 v100s8s16s16}
+Rythm{ v127s16s16s8 v110s8v100s8 v110s8s16s16 v100s8s8}
+Rythm{ v127s16s16s8 v110s8v100s16s16 v110s16s16s8 v100s8s8 }
+Rythm{ v110s8s16s16 v100s8s8 v110s16s16s8 s8v100s16s16 }
+
+Rythm { v127'bsc'8s8 v110s8v100s8 v110s16s16s8 v100s8s8 }
+Rythm { v127s16s16s8 v110s8v100s16s16 v110s16s16s8 v100s8s8 }
+Rythm { v127'bsc'8s16s16 v110s8s8 s16s16s8 s8v100s16s16 }
+Rythm { v110s16s16s8 s8v100s8 v110s16s16s16s16 } EP.T(110,85,!4) Rythm{s48s48s48s48s48s48s48s48s48s48s48s48} EP(127)
+Rythm { v127'bsc'8s8 v110s8s8 s16s16s8 s8v100s8 }
+Rythm { v127'bsc'8s16s16 v110s8s8 s16s16s8 s8v100s16s16 }
+Rythm { v127'bsc'8s8 v110s8s8 s8s16s16 s8v100s8 }
+Rythm { v127'bs'16s16s8 v110s8v100s16s16 s16s16v110s8 } EP.T(110,85,!4) Rythm{s48s48s48s48s48s48s48s48s48s48s48s48} EP(127)
+
+Rythm { v127'bsc'8s8 v110s8s8 v95s16v100s16v105s16v110s16 s8v100s8 }
+Rythm { v110s16s16s8 s8v100s8 v110s8s16s16 s8v100s8 }
+Rythm { v127'bsc'8s8 v110s8v100s16s16 s16s16v110s8 s8v100s8 }
+Rythm { v110s8s16s16 s8v100s8 s16s16v110s8 } EP.T(110,85,!4) Rythm{s48s48s48s48s48s48s48s48s48s48s48s48} EP(127)
+Rythm { v127'bsc'8s8 v110s8s8 s8v100s16s16 v110s8v100s8 }
+Rythm { v127'bsc'8s8 v110s8v100s16s16 s16s16v110s8 s8v100s8 }
+Rythm { v127'bsc'8v110s16s16 s8s8 v100s16s16v110s8 s8v100s16s16 }
+r1
+
+
+

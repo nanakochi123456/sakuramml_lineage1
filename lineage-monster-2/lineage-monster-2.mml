@@ -1,0 +1,379 @@
+Int MA3=1
+Int MA2=0
+// MA3=1,2 MA2=1
+
+曲名{"リネージュ１－モンスターとの戦争"}
+作者{"Copyright 1998-2003 NCsoft Corporation. Licenced to NC Japan K.K. All Rights Reserved. Arrenged by ななみ"}
+コメント{"http://www.lineageonline.jp/"}
+
+Include (unison.h);
+
+Tempo=110
+TimeBase      = 96     // 四分音符分解能
+拍子 4,4
+IF(MA2==1 || MA3==1) {
+	IF(MA2==0) {
+		Expression.Frequency(24);
+		Modulation.Frequency(16);
+	}
+} ELSE {
+	Expression.Frequency(16);
+//	Modulation.Frequency(16);
+}
+
+Function ChannelReserve(value) {	// MA-2のチャンネル同時発音数設定
+  IF(MA2 <> 0) {
+    y55,value
+  }
+}
+
+Function OctaveUnison2(Str s) {
+	IF(MA2==1 || MA3==1) {
+		Key=12;  s; Key=0;
+	} ELSE {
+		OctaveUnison(s);
+	}
+}
+Function Dy(D,value) {
+	Int Base = 127 - (D % 128)
+	Int Dynamic = D / 128
+	Int V
+	Int V2
+
+	V = value - Base
+	V = 127 - V
+	V = V * 10 * Dynamic
+	V = V / 1000
+	V = 127 - V
+	IF(V<0) {
+		V=0
+	}
+	IF(V>127) {
+		V=127
+	}
+	Result = V
+}
+
+Function Exp(value) {
+	Int	D=110*128+115
+	IF(MA2==0) {
+		EP(Dy(D,value));
+	}
+}
+
+Function Exp2(value) {
+	Int	D=110*128+115
+	IF(MA3==2 || (MA2==0 && MA3==0)) {
+		EP(Dy(D,value));
+	}
+}
+
+Function Exp_T(value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12) {
+	Int	NowTime;
+	Int	D=110*128+115
+
+	IF(MA2==0) {
+		NowTime = Time;
+	
+		EP.T(Dy(D,value1), Dy(D,value2), value3);
+		IF(value6<>0) {
+			Time=NowTime+value3
+			EP.T(Dy(D,value4), Dy(D,value5), value6)
+		}
+		IF(value9<>0) {
+			Time=NowTime+value3+value6
+			EP.T(Dy(D,value7), Dy(D,value8), value9)
+		}
+		IF(value12<>0) {
+			Time=NowTime+value3+value6+value9
+			EP.T(Dy(D,value10), Dy(D,value11), value12)
+		}
+		Time = NowTime;
+	}
+}
+
+Function Exp_T2(value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,value11,value12) {
+	Int	NowTime;
+	Int	D=110*128+115
+
+	IF(MA3==2 || (MA2==0 && MA3==0)) {
+		NowTime = Time;
+	
+		EP.T(Dy(D,value1), Dy(D,value2), value3);
+		IF(value6<>0) {
+			Time=NowTime+value3;
+			EP.T(Dy(D,value4), Dy(D,value5), value6)
+		}
+		IF(value9<>0) {
+			Time=NowTime+value3+value6;
+			EP.T(Dy(D,value7), Dy(D,value8), value9)
+		}
+		IF(value12<>0) {
+			Time=NowTime+value3+value6+value9;
+			EP.T(Dy(D,value10), Dy(D,value11), value12)
+		}
+		Time = NowTime;
+	}
+}
+
+Function SelVoice(midi,ma3big,ma3small,ma2) {
+  IF(MA2==0 && MA3==0) {
+    音色(midi)
+  }
+  IF(MA3==2) {
+    音色(ma3big,124,1)
+  }
+  IF(MA3==1) {
+    音色(ma3small,124,1)
+  }
+  IF(MA2==1) {
+    IF(ma2>128) {
+      音色(ma2-128,122,2)
+    } ELSE {
+      音色(ma2,122,0)
+    }
+  }
+}
+
+IF(MA2==1) {
+	r96
+	TrackSync
+}
+
+#STRINGS1={
+	Exp(127)
+	l16q100
+	[3 q130aq100rra rrrr rrq120b-q100r rrer]
+	arra rrrr rrb-r grre
+	a r-16
+}
+
+#BRASS1={
+	Exp(127)
+	l16q100
+	q130rq100rrr rrrr rrq120b-q100r rrer
+	[2 q130aq100rrr rrrr rrq120b-q100r rrer]
+	arrr rrrr rrb-r grre
+	a r-16
+}
+
+#STRINGS2_1={
+	l16q60
+	rrra rra8 rrb-r grer
+	arra rra8 rr>q80cq60<r b-rgr
+	arra rra8 rrb-8 rrgr
+	arra rra8 rr>q80cq60<r b-rgr
+
+	arra rra8 arb-8 rrgr
+	arra rra8 ar>q80cq60<r b-rgr
+	arra rra8 arb-8 rrgr
+}
+
+#STRINGS2_2={
+	q100
+	Exp_T(80,127,!2.)a1
+	g2.f4
+	Exp_T(127,127,!1,127,80,!2)e1.r2
+	Exp_T(100,127,!2.)a1
+	'a2>c2' 'c2e2'
+	Exp_T(127,127,!2.,127,100,!4)'c1d+1'
+}
+
+#BRASS2_1={
+	Exp(127)v120o5q50l16
+	r2.r8'e8a8'
+	r2.Sub{r8'd8g8'}<a8g+8
+	a8>r8 r2 r8'e8a8'
+}
+
+#BRASS2_2={
+	Exp(127)v120o5q50l16
+	r2 'a>c<''a>c<''a>c<'r 'eg''eg''eg'r<
+	r2 a8r4.
+	r2 a8r4.
+	r2 a8r4.
+}
+
+#STRINGS3_1={
+	>l16q80
+	erre rrer drrd rrdr
+	<
+}
+
+#STRINGS3_2={
+	l16q80
+	arra rrar grrg rrgr
+}
+
+トラック 1;
+	ChannelReserve(4)
+	IF(MA2==1) { M(64) }
+	SelVoice(Strings1,18,18,1+128)
+	o3v127
+	OctaveUnison{#STRINGS1}
+	o3
+	#STRINGS2_1
+	o4
+	OctaveUnison{Sub{#STRINGS3_1}#STRINGS3_2}
+
+IF(MA3==2) {
+トラック 2;
+	SelVoice(Strings2,44,1,Strings1)
+	o3v127
+	OctaveUnison{#STRINGS1}
+
+}
+IF(MA2==0) {
+トラック 12;
+	SelVoice(Strings2,30,30,Strings1)
+	o3v127
+	OctaveUnison{#STRINGS1}
+	[7 r1]
+	o4
+	OctaveUnison{Sub{#STRINGS3_1}#STRINGS3_2}
+}
+
+トラック 3;
+	ChannelReserve(2)
+	IF(MA2==1) { M(64) }
+	SelVoice(Violin,19,19,2+128)
+	o3v127
+	OctaveUnison{#STRINGS1}
+	o3
+	#STRINGS2_1
+	o4
+	OctaveUnison2{Sub{#STRINGS3_1}#STRINGS3_2}
+
+
+トラック 4;
+	ChannelReserve(2)
+	IF(MA2==1) { M.W(0,0,!4,0,32,!2) }
+	SelVoice(Strings1,43,18,2+128)
+	o5v127
+	[4 r1]
+	#STRINGS2_2
+
+IF(MA2==0) {
+トラック 5;
+	ChannelReserve(1)
+	SelVoice(Strings2,30,30,Strings1)
+	o5v127
+	[4 r1]
+	#STRINGS2_2
+}
+
+トラック 6;
+	ChannelReserve(3)
+	SelVoice(BrassSection,39,39,13+128)
+	o4v127
+	#BRASS1
+	#BRASS2_1
+	#BRASS2_2
+
+IF(MA2==0) {
+トラック 7;
+	SelVoice(FrenchHorn,20,20,FrenchHorn)
+	o4v127
+	[7 r1]
+	#BRASS2_2
+}
+
+IF(MA2==0) {
+トラック 8;
+	SelVoice(Strings1,18,18,Strings1)
+	o2v127
+	#STRINGS1
+	o2
+	#STRINGS2_1
+	o2
+	#STRINGS3_2
+}
+トラック 9;
+	ChannelReserve(2)
+	SelVoice(Contrabass,8,8,8+128)
+	o2v127
+	OctaveUnison{#STRINGS1}
+	o2
+	OctaveUnison(#STRINGS2_1)
+	o2
+	OctaveUnison(#STRINGS3_2)
+
+IF(MA3==2) {
+トラック 11;
+	SelVoice(Strings1,42,1,Strings1)
+	o2v127
+	#STRINGS1
+	o2
+	#STRINGS2_1
+	o2
+	#STRINGS3_2
+}
+
+トラック 10;
+	ChannelReserve(3)
+
+IF (MA3==2) {
+	音色(3,125,0)
+	$b{n(Kick1),}//36
+	$k{n(Kick2),}//35
+	$s{n(Snare1),}//38
+	$c{n(49),}//52
+} ELSE {IF (MA3==1) {
+	音色(3,125,0)
+	$b{n(Kick1),}//36
+	$k{n(Kick2),}//35
+	$s{n(Snare1),}//38
+	$c{n(ChineseCymbal),}//52
+} ELSE {IF (MA2==1) {
+	音色(3,123,0);
+	$b{n(12),}//36 ADPCM
+	$k{n(36),}//35
+	$s{n(Snare1),}//38
+	$c{n(ChineseCymbal),}//52
+} ELSE {
+	音色(OrchestraSet)
+	$b{n(Kick1),}//36
+	$k{n(Kick2),}//35
+	$s{n(Snare1),}//38
+	$c{n(ChineseCymbal),}//52
+}}}
+
+	Exp(127)q98
+	IF(MA2==0) {
+		Sub {
+			Rythm {
+				v127b1
+				v127b1
+				r2.r8.v50b32v80b32 r-1 v100b1
+				v127b1
+			}
+		}
+	} ELSE {
+		Sub { Rythm{v127b1b1v100b1v127b1} }
+	}
+	Rythm {
+		v127k8.k16 r8v100k16v127k16 v100k8v80k16k16 v80k16v50k16v40k16v30k16
+		v127k8.k16 r16v110k16v60k16v110k16 v100k8v70k16v110k16 v80k16v50k16v40k16v30k16
+		v127k8.k16 r16v50k16v50k16v40k16 v90k8v70k16v80k16 v90k16v70k16v80k16v60k16
+		v127k8.k16 r16v50k16v50k16v40k16 v90k8v70k16v80k16 v90k16v70k16v80k16v60k16
+	}
+
+	Sub { Rythm{v127b1b1b1b1b1b1b1} }
+	Rythm{
+		[7
+			v127k16v80k16k16v127k16 v70k16k16k16k16 v110k16v70k16v90k16v70k16 v110k16v70k16v90k16v70k16
+		]
+	}
+
+	Sub {
+		Rythm{v127c2 r4.c1}
+	}
+	Sub {
+		[2 Rythm{v80s16v10s16s16v80s16 v10s16s16v80s16v10s16} ]
+	}
+	Sub {
+		[2 Rythm{v127k16v80k16k16v127k16 v80k16k16v127k16v80k16} ]
+	}
+	Rythm{v127r1b1}
+
+

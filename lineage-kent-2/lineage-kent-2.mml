@@ -1,0 +1,266 @@
+Int MA3=1
+Int MA2=0
+
+// MA3なら1か2 MA-2なら1 両方1にするとおかしくなるよ。きっと
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//　Ver 1.0 : 2003/08/27 とりあえずできる
+//  Ver 1.1 : 2003/09/19 少しリアルにしたら、２ｋ程増える。汗
+//                       なので急遽MA-2版を作る
+//                       音とりミスを修正
+//  Ver 1.2 : 2003/10/08 容量大削減＆音質アップ、１音おかしい所を修正
+//
+//////////////////////////////////////////////////////////////////////////////
+
+曲名{"リネージュ１－ケント"}
+作者{"Copyright 1998-2003 NCsoft Corporation. Licenced to NC Japan K.K. All Rights Reserved. Arrenged by ななみ"}
+コメント{"http://www.lineageonline.jp/"}
+
+
+Tempo=90
+
+IF(MA2==1 || MA3==1) {
+	Expression.Frequency(8);
+	Modulation.Frequency(20);
+} ELSE {
+	Expression.Frequency(4);
+	Modulation.Frequency(5);
+}
+
+//REV(127)
+
+Include(delay.h);
+
+Function Delay(Str s,Int v1, Int v2) {
+  IF(MA3==2) {
+    MidiDelay(s,v1,v2)
+  } ELSE {
+    s;
+  }
+}
+
+Function ChannelReserve(value) {
+  IF(MA2 == 1) {
+    y55,value
+  }
+}
+
+Function Exp(value) {
+  IF(MA2 <> 1) {
+    EP(value);
+  }
+}
+
+Function Exp_T(value1,value2,value3,value4,value5,value6) {
+  IF(MA2 <> 1) {
+    IF(value4<>0) {
+      EP.T(value1,value2,value3,value4,value5,value6);
+    } ELSE {
+      EP.T(value1,value2,value3);
+    }
+  }
+}
+Int BackupVoiceMidi=0
+Int BackupVoiceMA3=0
+Int BackupVoiceMA2=0
+Function SelVoice(midi,ma3,ma2) {
+  IF(MA2==0 && MA3==0) {
+    IF(BackupVoiceMidi<>midi) {
+      音色(midi);
+      BackupVoiceMidi=midi;
+    }
+  }
+  IF(MA3<>0) {
+    IF(BackupVoiceMA3<>ma3) {
+      音色(ma3,124,1)
+      BackupVoiceMA3=ma3;
+    }
+  }
+  IF(MA2==1) {
+    IF(BackupVoiceMA2<>ma2) {
+      IF(ma2>128) {
+	  音色(ma2-128,122,2)
+	} ELSE {
+        音色(ma2,122,0)
+	}
+      BackupVoiceMA2=ma2;
+    }
+  }
+}
+
+//_トラックの宣言
+トラック 1;
+ChannelReserve(1)
+SelVoice(GrandPiano,6,1+128)
+音量(110)
+音階５
+音符８
+ゲート100
+
+o4rb>ef+gf+gbc1<
+  rb>ef+gf+gbc1
+  r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1
+
+IF(MA3==2 || MA2==1) {
+SelVoice(GrandPiano,17,11+128)
+}
+  o6rb>ef+gf+gb>c1
+  o5rb>ef+gf+gbc4e-8f8g2
+
+トラック 2;
+ChannelReserve(3)
+SelVoice(Violin,5,2+128)
+ゲート 100
+
+  M.W(0,100,!8.)
+
+ r1r1r1r1
+ v100Exp_T(60,127,!8)o6g4>e-4d4c8<b-8a4Exp_T(127,80,!2)g2Exp(127)g8a8
+ b-4a8b-8>c4<b-8>c8 q90Exp_T(127,60,!2.)d2. q100Exp(127)c8d8
+ e-4c4<a4>e-4d4c8<b-8a4g8a8
+ b-4.a16b-16>c4<g4g4.f+16g16Exp_T(127,80,!2)a2 Exp(127)
+ Sub{b-1} Sub{r2g2} r1 Exp_T(75,60,!2.)e-4d4<b-4
+
+IF(MA3==2) {
+トラック 11;
+SelVoice(Violin,15,2+128)
+ゲート 100
+
+  M.W(0,100,!8.)
+
+ r1r1r1r1
+ v100Exp_T(60,127,!8)o6g4>e-4d4c8<b-8a4Exp_T(127,80,!2)g2Exp(127)g8a8
+ b-4a8b-8>c4<b-8>c8 q90Exp_T(127,60,!2.)d2. q100Exp(127)c8d8
+ e-4c4<a4>e-4d4c8<b-8a4g8a8
+ b-4.a16b-16>c4<g4g4.f+16g16Exp_T(127,80,!2)a2 Exp(127)
+ Sub{b-1} Sub{r2g2} r1 Exp_T(75,60,!2.)e-4d4<b-4
+}
+
+トラック 3;
+ChannelReserve(1)
+SelVoice(Piccolo,14,Recorder)
+ゲート 100
+  M.W(0,80,!8.)
+
+ r1r1r1r1
+ r1r1r1r1
+ r1r1r1r1
+ r1r2.
+ o6
+ Exp(127)g8a8
+ b-4.^16a32b-32>c4.^16<b-32>c32Exp_T(127,80,!2.)d2.r4
+ Exp(127)e-4c4<Exp_T(127,100,!2)a2
+ Exp(127)b-4a4Exp_T(127,100,!2)g2
+ Exp(127)b-2a2Exp_T(127,90,!2.)g2.
+
+トラック 4;
+ChannelReserve(3)
+ゲート 100
+SelVoice(TremoloStrings,4,128+4)
+IF(MA2==1) {
+   v75
+   M(63)
+} ELSE {
+  v100
+}
+ Exp_T(50,100,!1)'o5b1o6e1' Exp_T(100,60,!1)'o6c1g1' Exp_T(70,100,!1)'o6e1b1' Exp_T(100,50,!1)'o6g1o7c1'
+
+//SelVoice(Strings1,4,Viola)
+
+
+IF(MA2==1) {
+  v80
+  M(31)
+} ELSE {
+ v100
+ SelVoice(Strings1,4,4,128+4)
+}
+ Exp(80)'o5b-1.o6d1.'Exp_T(100,50,!2)o6d2 Exp(100)v100'o5b-2o6e-2''o6c2f2' Exp_T(100,30,!1)'o5b-1o6d1'
+ Exp(100)o6c4<Sub{a2.}Sub{r4f+2}r2.g2e2
+ r1r1
+ o4Exp_T(80,100,!2)g2>d2Exp_T(100,80,!1)g2.r4
+ 
+ Exp(100)e-2f2 Exp_T(100,80,!1)d1
+ Exp(100)c4e-4Exp_T(100,80,!4)d4c4<Exp_T(90,100,!8)b-4>c4 Exp_T(100,60,!2)d2
+ IF(MA2==0) {
+   Exp_T(100,90,!1.)'o5e-2o4b-2''o5d2o4a2''o5c2o4a2'<Exp_T(90,60,!2)'o4b-2o4g2'
+ } ELSE {
+ o4b-2a2a2g2
+ }
+
+SelVoice(TremoloStrings,4,128+4)
+
+IF(MA2==1) {
+  v75
+  M(63)
+} ELSE {
+ v100
+}
+ Exp_T(50,100,!1)'o5b1o6e1' Exp_T(100,60,!1)'o6c1g1' Exp_T(70,100,!1)'o6e1o5b1' Exp_T(100,50,!1)'o5g1o6c1'
+
+トラック 5;
+ChannelReserve(4)
+ゲート 100
+SelVoice(FrenchHorn,7,128+6)
+IF(MA2==1) {
+  v80
+} ELSE {
+  v100
+}
+o5e2e-2 Exp_T(100,100,!2,100,50,!2)'c1g1'
+Exp(100)e2g2'c2e-2''d4f4''c4e-4'
+Exp_T(100,100,!1,100,50,!1)'o4g1.o5d1.'o5g2
+r1r1r1r1 Exp_T(90,110,!1)'o5e-1o4b-1'Exp_T(100,70,!1)'o5d1o4a1'
+o5r2Exp_T(80,100,!2)d2Exp_T(110,70,!1)g1
+Exp(100)e-2f2 Exp(100,80,!1)d1
+Exp(100)c4e-4d4c4<b-4>c4 Exp_T(100,60,!2)d2
+Exp(100)e-2d2c2<Exp_T(100,60,!2)b-2
+
+トラック 9;
+ChannelReserve(2)
+ゲート 100
+SelVoice(PizzicatoStrings,8,7+128)
+
+v127
+Delay("o3e4<b4>e4g4c4e-8g8>c4<g4 e4<b4>e4g4c4e-8g8>c8d8e-8",1,!48)r8
+
+SelVoice(Strings1,13,Viola)  
+  v127
+  o3g1^2.f4e-2f2<b-1
+  a2>d2g2e2e-1d1
+  g1^2.f4
+  e-2f2<b-1a2>d2g2e2e-2d2g2.r4
+
+SelVoice(PizzicatoStrings,8,7+128)
+v127
+Delay("o3e4<b4>e4g4c4e-8g8>c4<g4  e4<b4>e4g4c4e-8g8>c2",1,!48)
+
+IF(MA3==2) {
+トラック 12;
+ゲート 100
+SelVoice(PizzicatoStrings,8,7+128)
+
+v127
+r1r1r1r1
+
+SelVoice(Strings1,16,Viola)  
+  v127
+  o3g1^2.f4e-2f2<b-1
+  a2>d2g2e2e-1d1
+  g1^2.f4
+  e-2f2<b-1a2>d2g2e2e-2d2g2.r4
+
+SelVoice(PizzicatoStrings,8,7+128)
+v127
+r1r1r1r1
+}
+
+トラック 8;
+ChannelReserve(2)
+SelVoice(Timpani,11,128+9)
+r1r1r1r1
+r1r1r1r1r1r1r1  
+r2v100Exp_T(80,127,!2)
+l24o3dddddddddddd
+g4.g8g2g4.g8g2

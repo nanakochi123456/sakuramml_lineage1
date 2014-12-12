@@ -1,0 +1,440 @@
+SoundType=0;
+Int MA3=0
+Int MA2=0
+Int ATS130=0
+// MA3=1 : ma3 small size
+// MA3=2 : ma3 big size
+// MA2=1 : ma2 - 製作不能
+// ATS130=1 : MA3_AT v1.30以降用
+
+曲名{"リネージュ１－All Against The Odds - ハイネ等フィールド"}
+作者{"Copyright 1998-2005 NCsoft Corporation. Licenced to NC Japan K.K. All Rights Reserved. Arrenged by ななみ"}
+コメント{"http://www.lineage.jp/"}
+
+Tempo=70
+TimeBase      = 96     // 四分音符分解能
+拍子 4,3
+IF(MA3==2 || (MA2==0 && MA3==0)) {
+	Expression.Frequency(3);
+} ELSE {
+	Expression.Frequency(6);
+}
+
+REV(127)
+
+Function ChannelReserve(value) {
+  IF(MA2 == 1) {
+    y55,value
+  }
+}
+
+Function Exp(value) {
+  IF(MA2 <> 1) {
+    EP(value);
+  }
+}
+
+Function Exp_T(value1,value2,value3,value4,value5,value6) {
+  IF(MA2 <> 1) {
+    IF(value4<>0) {
+      EP.T(value1,value2,value3,value4,value5,value6);
+    } ELSE {
+      EP.T(value1,value2,value3);
+    }
+  }
+}
+
+Function Exp2(value) {
+  IF(MA2 <> 1 && MA3 <> 1) {
+    EP(value);
+  }
+}
+
+Function Exp2_T(value1,value2,value3,value4,value5,value6,value7,value8,value9) {
+  IF(MA2 <> 1 && MA3<> 1) {
+    IF(value7<>0) {
+      EP.T(value1,value2,value3,value4,value5,value6,value7,value8,value9);
+    } ELSE {IF(value4<>0) {
+      EP.T(value1,value2,value3,value4,value5,value6);
+      } ELSE {
+        EP.T(value1,value2,value3);
+      }
+    }
+  }
+}
+
+Function SelVoice(midi,ma3big,ma3small,ma2) {
+  IF(MA2==0 && MA3==0) {
+    音色(midi)
+  }
+  IF(MA3==2) {
+    音色(ma3big,124,1)
+  }
+  IF(MA3==1) {
+    音色(ma3small,124,1)
+  }
+  IF(MA2==1) {
+    IF(ma2>128) {
+      音色(ma2-128,122,2)
+    } ELSE {
+      音色(ma2,122,0)
+    }
+  }
+}
+
+
+// track 1 fm 1 oboe / piccoro
+トラック 1;
+ChannelReserve(1)
+SelVoice(Oboe,1,1,Oboe);
+v127q100l8
+M.onNoteWave(1,90,!4,90,50,!2.)
+Exp2_T(70,105,!8)gExp2_T(80,110,!8)a
+M.onNoteWave(1,90,!2,90,50,!2.)
+Exp2_T(100,127,!8.)b-4>Exp2_T(100,127,!8,127,105,!4.)d2 Exp2_T(100,127,!8)c Exp2_T(127,100,!8)e <
+Exp2_T(90,127,!4,127,100,!4,110,60,!4)b2.Exp2_T(70,115,!8.115,100,!16)ga
+Exp2_T(100,127,!2)b-4.>Exp2_T(100,127,!16)c <Exp2_T(100,110,!8,110,100,!8)a4Exp2_T(100,105,!8,105,80,!8)f4
+Exp2_T(85,127,!4.,127,127,!4,127,50,!4)g2.^8 r8
+r1r1r1r1r1r2.
+//?
+SelVoice(Piccolo,1,1,Piccolo)
+M.onNoteWave(1,110,!4,110,60,!2.)
+o6Exp2_T(60,110,!2)b4.^16>c32<b32 Exp2_T(100,120,!4)a4M.onNoteWave(1,50,!4)Exp2_T(110,127,!4)g4
+M.onNoteWave(1,110,!4,110,60,!2.)
+Exp2_T(90,127,!4,127,60,!2.)b2.^8^16 Exp2_T(60,110,!2^16)g32a32
+b4.^16>c32<b32 Exp2_T(100,120,!4)a4M.onNoteWave(1,50,!4)Exp2_T(110,127,!4)g4
+M.onNoteWave(1,110,!4,110,60,!2.)
+Exp2_T(90,127,!4.,127,50,!2.)e1
+
+Exp2(60)g32a32 Exp2_T(80,110,!4,110,100,!8.)b4.^16 >Exp2_T(100,127,!4,127,110,!4)d2
+Exp2_T(100,127,!4.,127,100,!4.)e4d2 Exp2_T(120,127,!4)c4<
+Exp2_T(110,127,!4,127,110,!4)b4.^16>c32<b32 Exp2_T(110,127,!8.)a4 Exp2_T(110,120,!8,120,110,!8)g4
+Exp2_T(100,125,!4,125,50,!2)e2.^8 Exp2_T(60,90,!4)a16b16>
+
+Exp2_T(90,120,!4,120,100,!4)c4.^16<b32>c32 Exp2_T(100,110,!4)d4 Exp2_T(100,127,!4)e4
+
+// track 2 fm 2 trumpet
+トラック 2;
+ChannelReserve(1)
+SelVoice(Trombone,1,1,Trumpet);
+v127q100l8
+M.onNoteWave(0,0,!8.,0,50,!4.,50,40,!1,40,20,!1)
+r4
+r1 r1 r1 r2.r8
+Exp2_T(110,115,!8)g16a16
+b-8.b-16 >Exp2(110)d2 Exp2_T(115,127,!8)c8.e16
+Exp2_T(115,127,!4,127,80,!2)d2. <Exp2_T(100,120,!4)g8a8
+Exp2_T(115,127,!8)b-4. >c16<b-16 Exp2_T(115,127,!8)a4Exp2_T(120,127,!16)f4
+Exp2_T(100,110,!4,110,80,!2.,80,40,!2)g1&g2r2r2.
+
+// track 3 fm 3 harp
+トラック 5;
+ChannelReserve(4)
+SelVoice(OrchestralHarp,1,1,OrchestralHarp);
+r4
+o3
+l16 S{g4}>S{rd8.}S{r8g8}r8.a
+l64 S{f2}S{rb-2}>S{rrd2}<r2
+l64 S{g4}>S{rc4}S{rre4}<r4<
+l8  S{g2}>S{rd2}S{r4g2}S{r4.a2}r2b2
+l8  S{e-2}S{rb-4.}>r4e-4<
+l8  S{f2}>S{rc4.}r4f4<
+l8  S{c2}S{rg2}>S{r4c2}S{r4.d2}r2e2
+
+
+// track 4 fm 4 horn
+ChannelReserve(3)
+SelVoice(FrenchHorn,1,1,FrenchHorn);
+o5
+r4
+r1r1r1r2.
+r8l4
+d8
+<S{b-}>S{d}g <S{b-2}>S{d2}f2 <S{g}>S{c}e
+<S{g1}>S{b1}d1
+
+
+
+
+
+
+
+
+
+End
+
+
+// track 1 fm 1
+トラック 1;
+ChannelReserve(1)
+SelVoice(PanFlute,1,1,PanFlute);
+q95l16o6
+[2
+Exp2_T(120,90,!8.)b8.>c+<br>Exp2(127)erExp2_T(120,80,!4)dc+<ba b8.>c+<Exp2_T(85,60,!4.)b4.r8
+Exp2_T(120,90,!4)b8.>c+<br>Exp2_T(100,80,!4.)erdc+<ba b8.ag4.r8
+]
+
+[8 r2. ]
+
+[2
+Exp2_T(120,90,!8.)b8.>c+<br>Exp2(127)erExp2_T(120,80,!4)dc+<ba b8.>c+<Exp2_T(85,60,!4.)b4.r8
+Exp2_T(120,90,!4)b8.>c+<br>Exp2_T(100,80,!4.)erdc+<ba b8.ag4.r8
+]
+
+Exp2(127)
+'f+2a2'g16f+16e8 Exp2_T(127,20,!1)d+1.
+
+// track 2 fm 2
+トラック 2;
+ChannelReserve(2)
+SelVoice(PanFlute,1,1,PanFlute);
+IF(MA3==1) { Exp(105) }
+q95l16o6
+[2
+Sub{
+Exp2_T(80,110,!8)g8.agr>c+r<Exp2_T(110,90,!4)bagf+ g8.aExp2_T(100,80,!2)g4.r8
+Exp2_T(80,110,!4)g8.agr>c+r<Exp2_T(110,90,!4)bagf+ g8.f+Exp2_T(90,127,!12,127,110,!4)e4.r8
+}
+e4er8.gf+e8 e4e4.r8
+e4er8.gf+e8 e8.r e2 
+]
+
+[8 r2. ]
+
+[2
+Sub{
+Exp2_T(80,110,!8)g8.agr>c+r<Exp2_T(110,90,!4)bagf+ g8.aExp2_T(100,80,!2)g4.r8
+Exp2_T(80,110,!4)g8.agr>c+r<Exp2_T(110,90,!4)bagf+ g8.f+Exp2_T(90,127,!12,127,110,!4)e4.r8
+}
+e4er8.gf+e8 e4e4.r8
+e4er8.gf+e8 e8.r e2 
+]
+
+// track 3 fm 3
+トラック 3;
+ChannelReserve(2)
+SelVoice(音色(Oboe)Oboe,2,2,Oboe)
+q100l16o5v127Exp2(127)
+[8 r2. ]
+Exp2_T(90,110,!2)a8.b>cr<b>cdc<ba g8.Exp2_T(110,90,16)aExp2_T(100,127,!8,127,70,!2)b2
+Exp2_T(100,127,!8)a4>Exp2_T(100,127,!8.)d4.^16<Exp2(100)a32g32 Exp2_T(100,127,!8)f+8.dExp2_T(127,80,!2)e2
+Exp2_T(100,127,!4.)'c8.a8.''eb' 'e>c<'r 'g>e<'r Exp2_T(127,110,!4)'f+>d<''a>c<''gb''f+a'
+'e8.g8.''f+a'Exp2_T(100,127,!8,127,80,!4.)'g2b2'
+Exp2_T(100,127,!4.,127,70,!4.)Sub{f+4}a8.b32a32'e2g2'
+Exp2_T(100,127,!4.,127,70,!4.)Sub{c+4}e8.f+32e32'<b2>d2'
+Exp_T(80,0,!2.^2.^2.)e2.^2.^2.r2.
+Exp(127)
+[4 r2.]
+o5
+Exp2_T(80,127,!8)'a2>d2<'Exp2_T(100,120,!16,120,100,!8.)'g4>c4<'
+Exp2_T(90,127,!8,127,100,!2^8)'f+2.b2.' Exp2_T(127.110,!2)f+4g+4.e8
+Exp2_T(100,127,!4,127,110,!4)d+2 Exp2_T(127,110,!4)<b16>c+16d8
+Exp2_T(100,127,!4,127,50,!2)e2.
+
+// track 4 fm 3
+トラック 4;
+ChannelReserve(3)
+SelVoice(Banjo,29,3,Banjo)
+q100l16o5v127Exp(80)
+[8 r2. ]
+e2f+4e8.a8agf+e8<b8>
+f+4a4gf+ed f+4e2
+e2f+4ergf+grf+gagf+e
+f+r8.e2 c+r8.<b2
+[8 r2.]
+o5f+2e4 d+2>c+16d+16e8 <Sub{f+2}Sub{r48b4.^24^16}r24>d+4.^48^16 c+16d+16e8 <Sub{b2}>r48d+4.^24^16
+o4b16>c+16d8 Sub{<a2>}Sub{r48c+4.^24^16}r24e4.^48^16
+
+// track 5 fm 2
+トラック 5;
+ChannelReserve(2)
+SelVoice(OrchestralHarp,4,4,OrchestralHarp)
+o4v127Exp(80)q100
+[8 'e2.b2.' ]
+[8 r2.]
+[8 'e2.b2.' ]
+l8da>df+<Sub{g2}>Sub{r48c8.^24}r24e8.^48<
+rf+b>d+Sub{c+4}r48e8.^24<
+r2.
+r2Sub{g4}Sub{r48b8.^24}>r24d8.^48<
+Sub{a2.}>Sub{r48c+4.^16^24}r24c+4.^16^48
+
+// track 6 fm 2
+トラック 6
+ChannelReserve(2)
+SelVoice(PizzicatoStrings,5,28,PizzicatoStrings)
+
+o4v127Exp2(90)l4q100
+r4b8>e8<'a>d<' r2'>eb<' r4b8>e8<'a>d<' r2'b8>d8<''a8>c+8<'
+r4b8>e8<'a>d<' r2'>eb<' r4b8>e8<'a>d<' r2>b8g8<
+[8 r2.]
+r4r8>e8<'a>d<' r2'>e<b' r4r8>e8<'a>d<' r2'b8>d8<''a8>c+8<'
+r4b8>e8<'a>d<' r2'>eb<' r4b8>e8<'a>d<' r2.
+
+// track 7 fm 1
+トラック 7
+ChannelReserve(1)
+SelVoice(AcousticBass,6,6,AcousticBass)
+
+q100o3v127Exp(120)
+e2.e2.e2.e2.
+e2.e2.e2.e2.
+[8 r2. ]
+e2.e2.e2.e2.
+e2.e2.e2.e2.
+
+r2.r2.r2.r2<g4 a2.
+
+// track 8 pcm 1
+トラック 8
+ChannelReserve(1)
+SelVoice(Timpani,24,7,Timpani)
+q100l16o3v127Exp(127)
+[8 r2. ]
+<v127a4v80a8v100a8v127a4> e4v80e8v100e8v127e4 f+4.f+8f+4e4<b2>
+<a2.>e4.e8e4d4c2<a4g2>
+
+// track 9 fm 8
+IF (MA2==0) {
+トラック 9
+SelVoice(Glockenspiel,27,27,Glockenspiel)
+q100o5v127Exp(123)
+[15 r2.]
+r4r8r48
+Sub{g64}
+Sub{r48a64}
+Sub{r24b64}
+Sub{r24r48>c64<}
+Sub{r12>d64<}
+Sub{r12r48>e64<}
+r12r24>f+64
+r1r1
+}
+
+// track 10 rythm pcm 3 fm1
+トラック 10;
+q90
+IF (MA3==2) {
+$b{n(Kick1),}//36
+$j{n(JingleBell),} //83
+$t{n(Tambourine),} //54
+$c{n(SplashCymbal),} //55
+$m{n(MuteHighConga),}//62
+$o{n(OpenHighConga),}//63
+$s{n(Castanets),}//85
+$y{n(RideCymbal1),}//51
+$v{v(?)}
+音色(4,125,0)
+} ELSE { IF (MA3==1) {
+$b{n(Kick1),}//36
+$j{n(JingleBell+1),} //83
+$t{n(Tambourine-1),} //54
+$c{n(SplashCymbal),} //55
+$m{n(MuteHighConga),}//62
+$o{n(OpenHighConga),}//63
+$s{n(Castanets),}//85
+$y{n(RideCymbal1),}//51
+$v{v(?)}
+音色(3,125,0)
+} ELSE { IF (MA2==1) {
+ChannelReserve(4)
+$b{n(Kick1),}//36
+$j{n(JingleBell),} //83
+$t{n(Tambourine),} //54
+$c{n(0),}
+//$c{n(SplashCymbal),} //55
+$m{n(0),}
+//$m{n(MuteHighConga),}//62
+$o{n(0),}
+//$o{n(OpenHighConga),}//63
+$s{n(0),}
+//$s{n(Castanets),}//85
+$y{n(0),}
+//$y{n(RideCymbal1),}//51
+$v{v(?)}
+音色(3,123,0) 
+} ELSE { {
+$b{n(Kick1),}//36
+$j{n(JingleBell),} //83
+$t{n(Tambourine),} //54
+$c{n(SplashCymbal),} //55
+$m{n(MuteHighConga),}//62
+$o{n(OpenHighConga),}//63
+$s{n(Castanets),}//85
+$y{n(RideCymbal1),}//51
+$v{v(?)}
+} } } }
+
+v(127)Exp(127)
+
+IF (ATS130==1) {
+Rythm{j4j8 }Exp_T(60,127,!8) Rythm{t48t48t48t48t48t48}Exp(127)Rythm { t4 }
+Rythm{j4j4.m16m16}
+Rythm{'csj'4j8 }Exp_T(60,127,!8) Rythm{t48t48t48t48t48t48}v(127)Rythm{ t4 }
+Rythm{j4j4o4}
+
+Rythm{j4j8 }Exp_T(60,127,!8) Rythm{t48t48t48t48t48t48}Exp(127)Rythm{t4 }
+Rythm{j4j4.m16m16}
+Rythm{'csj'4j8 }Exp_T(60,127,!8) Rythm{t48t48t48t48t48t48}Exp(127)Rythm{t4 }
+Rythm{j4j4r4}
+
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127b2'b8t8'v80t16v100t16}
+Rythm{v127'b4t4''b4.t4.'v90t8}
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127'b4.t4.'v80t8v127'b4t4'}
+Rythm{v127'b4t4'} Exp_T(80,127,!2) [24 Rythm{t48} ]
+Exp_T(127,60,!2.)Rythm{'b48t48'} [35 Rythm{t48} ]
+Exp(127)
+
+Rythm{v127'b4j4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b8.j8.'v50b16'b8v127j8'v80b16v100b16 v127b8.v30y32v60y32}
+Rythm{v127'b4j4y4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b4j4'v50'b8.v127j8.'v80b16v127b8v80b8}
+Rythm{v127'b4j4'v80'b8j8'v80t16v100t16v127t4}
+Rythm{v127'b4j4'v50'b8v127j8'v80b16v100b16 v127b4}
+Rythm{v127'b4j4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b8.j8.'v50b16v80'b4v127j4'v80b4}
+
+Rythm{v100b2b4}
+Rythm{v127b4v100b8b8b4}
+Rythm{v127b4v100b8b8b4}
+Rythm{b4.b8'v127b4v100t4'}
+Rythm{'b2.t2.'}
+} ELSE {
+Rythm{j4j8 }v.T(0,60,!8) Rythm{t48t48t48t48t48t48}v(127)Rythm { t4 }
+Rythm{j4j4.m16m16}
+Rythm{'csj'4j8 }v.T(0,60,!8) Rythm{t48t48t48t48t48t48}v(127)Rythm{ t4 }
+Rythm{j4j4o4}
+
+Rythm{j4j8 }v.T(0,60,!8) Rythm{t48t48t48t48t48t48}v(127)Rythm{t4 }
+Rythm{j4j4.m16m16}
+Rythm{'csj'4j8 }v.T(0,60,!8) Rythm{t48t48t48t48t48t48}v(127)Rythm{t4 }
+Rythm{j4j4r4}
+
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127b2'b8t8'v80t16v100t16}
+Rythm{v127'b4t4''b4.t4.'v90t8}
+Rythm{v127'b4t4'b8'b16v60t16'v90t16v127'b4t4'}
+Rythm{v127'b4.t4.'v80t8v127'b4t4'}
+Rythm{v127'b4t4'} v.T(20,60,!2) [24 Rythm{t48} ]
+v.T(70,5,!2.)Rythm{'b48t48'} [35 Rythm{t48} ]
+
+
+Rythm{v127'b4j4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b8.j8.'v50b16'b8v127j8'v80b16v100b16 v127b8.v30y32v60y32}
+Rythm{v127'b4j4y4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b4j4'v50'b8.v127j8.'v80b16v127b8v80b8}
+Rythm{v127'b4j4'v80'b8j8'v80t16v100t16v127t4}
+Rythm{v127'b4j4'v50'b8v127j8'v80b16v100b16 v127b4}
+Rythm{v127'b4j4'v80'b8v127j8'v80t16v100t16v127t4}
+Rythm{v127'b8.j8.'v50b16v80'b4v127j4'v80b4}
+
+Rythm{v100b2b4}
+Rythm{v127b4v100b8b8b4}
+Rythm{v127b4v100b8b8b4}
+Rythm{b4.b8'v127b4v100t4'}
+Rythm{'b2.t2.'}
+}
